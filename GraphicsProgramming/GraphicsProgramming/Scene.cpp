@@ -2,7 +2,7 @@
 
 // Scene constructor, initilises OpenGL
 // You should add further variables to need initilised.
-Scene::Scene(Input *in)
+Scene::Scene(Input* in)
 {
 	// Store pointer for input class
 	input = in;
@@ -15,7 +15,6 @@ Scene::Scene(Input *in)
 	glShadeModel(GL_SMOOTH);
 
 	// Other OpenGL / render setting should be applied here.
-	//load textures
 	wood = SOIL_load_OGL_texture(
 		"gfx/wood.png",
 		SOIL_LOAD_AUTO,
@@ -73,7 +72,6 @@ Scene::Scene(Input *in)
 		SOIL_FLAG_COMPRESS_TO_DXT);
 
 	// Initialise scene variables
-	//initialize model data
 	glutSetCursor(GLUT_CURSOR_NONE);
 	glutWarpPointer(width / 2, height / 2);
 	model.load("models/teapot.obj", "gfx/grass.png");
@@ -81,6 +79,7 @@ Scene::Scene(Input *in)
 
 void Scene::handleInput(float dt)
 {
+	//c.handleinput(input, dt);
 	// Handle user input
 	if (cmode) {
 		if (input->isKeyDown('w')) {
@@ -108,7 +107,7 @@ void Scene::handleInput(float dt)
 			c.rright(dt);
 		}
 	}
-	//user input for changing camera and changing light colours
+
 	if (input->isKeyDown('1')) {
 		input->setKeyUp('1');
 		cmode = !cmode;
@@ -135,13 +134,13 @@ void Scene::update(float dt)
 void Scene::render() {
 
 	// Clear Color and Depth Buffers
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// Reset transformations
 	glLoadIdentity();
 	// Set the position to either the moving or stationary camera
 	if (cmode) {
-	gluLookAt(c.getpos().x, c.getpos().y, c.getpos().z, c.getlook().x, c.getlook().y, c.getlook().z, c.getup().x, c.getup().y, c.getup().z) ;
+		gluLookAt(c.getpos().x, c.getpos().y, c.getpos().z, c.getlook().x, c.getlook().y, c.getlook().z, c.getup().x, c.getup().y, c.getup().z);
 	}
 	else {
 		gluLookAt(3, 0.5f, 3, 0, 1, 0, 0, -1, 0);
@@ -180,7 +179,6 @@ void Scene::render() {
 	glEnable(GL_LIGHT2);
 
 	// Render geometry/scene here -------------------------------------
-	//setup skybox and contained point light
 	glPushMatrix();
 	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHT1);
@@ -188,7 +186,7 @@ void Scene::render() {
 	skybox();
 	glDisable(GL_LIGHT1);
 	glEnable(GL_DEPTH_TEST);
-	
+
 	glPopMatrix();
 	//creates room
 	room();
@@ -211,7 +209,7 @@ void Scene::render() {
 	glPopMatrix();
 	glPushMatrix();
 	//translates and renders benches
-	glTranslatef(0.0,0.0,2.0);
+	glTranslatef(0.0, 0.0, 2.0);
 	bench();
 	glTranslatef(-1.5, 0.0, 0.0);
 	glRotatef(-90, 0, 1, 0);
@@ -245,7 +243,7 @@ void Scene::render() {
 
 	// Render text, should be last object rendered.
 	renderTextOutput();
-	
+
 	// Swap buffers, after all objects are rendered.
 	glutSwapBuffers();
 }
@@ -256,70 +254,71 @@ void Scene::skybox() {
 	//front
 	glNormal3f(0.0f, 0.0f, -1.0f);
 	glTexCoord2f(0.25f, 0.5f);
-		glVertex3f(-0.5f, 0.5f, 0.5f);
+	glVertex3f(-0.5f, 0.5f, 0.5f);
 	glTexCoord2f(0.5f, 0.5f);
-		glVertex3f(0.5f, 0.5f, 0.5f);
+	glVertex3f(0.5f, 0.5f, 0.5f);
 	glTexCoord2f(0.5f, 0.25f);
-		glVertex3f(0.5f, -0.5f, 0.5f);
+	glVertex3f(0.5f, -0.5f, 0.5f);
 	glTexCoord2f(0.25f, 0.25f);
-		glVertex3f(-0.5f, -0.5f, 0.5f);
+	glVertex3f(-0.5f, -0.5f, 0.5f);
 	//right
 	glNormal3f(-1.0f, 0.0f, 0.0f);
 	glTexCoord2f(0.5f, 0.5f);
-		glVertex3f(0.5f, 0.5f, 0.5f);
+	glVertex3f(0.5f, 0.5f, 0.5f);
 	glTexCoord2f(0.75f, 0.5f);
-		glVertex3f(0.5f, 0.5f, -0.5f);
+	glVertex3f(0.5f, 0.5f, -0.5f);
 	glTexCoord2f(0.75f, 0.25f);
-		glVertex3f(0.5f, -0.5f, -0.5f);
+	glVertex3f(0.5f, -0.5f, -0.5f);
 	glTexCoord2f(0.5f, 0.25f);
-		glVertex3f(0.5f, -0.5f, 0.5f);
+	glVertex3f(0.5f, -0.5f, 0.5f);
 	//left
-		glNormal3f(1.0f, 0.0f, 0.0f);
+	glNormal3f(1.0f, 0.0f, 0.0f);
 	glTexCoord2f(0.25f, 0.5f);
-		glVertex3f(-0.5f, 0.5f, 0.5f);
+	glVertex3f(-0.5f, 0.5f, 0.5f);
 	glTexCoord2f(0.0f, 0.5f);
-		glVertex3f(-0.5f, 0.5f, -0.5f);
+	glVertex3f(-0.5f, 0.5f, -0.5f);
 	glTexCoord2f(0.0f, 0.25f);
-		glVertex3f(-0.5f, -0.5f, -0.5f);
+	glVertex3f(-0.5f, -0.5f, -0.5f);
 	glTexCoord2f(0.25f, 0.25f);
-		glVertex3f(-0.5f, -0.5f, 0.5f);
+	glVertex3f(-0.5f, -0.5f, 0.5f);
 	//back
-		glNormal3f(0.0f, 0.0f, 1.0f);
+	glNormal3f(0.0f, 0.0f, 1.0f);
 	glTexCoord2f(1.0f, 0.5f);
-		glVertex3f(-0.5f, 0.5f, -0.5f);
+	glVertex3f(-0.5f, 0.5f, -0.5f);
 	glTexCoord2f(0.75f, 0.5f);
-		glVertex3f(0.5f, 0.5f, -0.5f);
+	glVertex3f(0.5f, 0.5f, -0.5f);
 	glTexCoord2f(0.75f, 0.25f);
-		glVertex3f(0.5f, -0.5f, -0.5f);
+	glVertex3f(0.5f, -0.5f, -0.5f);
 	glTexCoord2f(1.0f, 0.25f);
-		glVertex3f(-0.5f, -0.5f, -0.5f);
+	glVertex3f(-0.5f, -0.5f, -0.5f);
 	//top
-		glNormal3f(0.0f, 1.0f, 0.0f);
+	glNormal3f(0.0f, 1.0f, 0.0f);
 	glTexCoord2f(0.25f, 0.0f);
-		glVertex3f(-0.5f, -0.5f, -0.5f);
+	glVertex3f(-0.5f, -0.5f, -0.5f);
 	glTexCoord2f(0.5f, 0.0f);
-		glVertex3f(0.5f, -0.5f, -0.5f);
+	glVertex3f(0.5f, -0.5f, -0.5f);
 	glTexCoord2f(0.5f, 0.25f);
-		glVertex3f(0.5f, -0.5f, 0.5f);
+	glVertex3f(0.5f, -0.5f, 0.5f);
 	glTexCoord2f(0.25f, 0.25f);
-		glVertex3f(-0.5f, -0.5f, 0.5f);
+	glVertex3f(-0.5f, -0.5f, 0.5f);
 	//bottom
-		glNormal3f(0.0f, -1.0f, 0.0f);
+	glNormal3f(0.0f, -1.0f, 0.0f);
 	glTexCoord2f(0.25f, 0.75f);
-		glVertex3f(-0.5f, 0.5f, -0.5f);
+	glVertex3f(-0.5f, 0.5f, -0.5f);
 	glTexCoord2f(0.5f, 0.75f);
-		glVertex3f(0.5f, 0.5f, -0.5f);
+	glVertex3f(0.5f, 0.5f, -0.5f);
 	glTexCoord2f(0.5f, 0.5f);
-		glVertex3f(0.5f, 0.5f, 0.5f);
+	glVertex3f(0.5f, 0.5f, 0.5f);
 	glTexCoord2f(0.25f, 0.5f);
-		glVertex3f(-0.5f, 0.5f, 0.5f);
+	glVertex3f(-0.5f, 0.5f, 0.5f);
 
 	glEnd();
 }
 
-void Scene::planeXZ(float x, float y, float z,float TMX, float TMY)
+//contsructs the walls and floors of the scene
+void Scene::planeXZ(float x, float y, float z, float TMX, float TMY)
 {
-	glTexCoord2f(x / 10/TMX, (z + 1) / 10 / TMY);
+	glTexCoord2f(x / 10 / TMX, (z + 1) / 10 / TMY);
 	glVertex3f((x / 10), y, (z / 10) + 0.1);
 	glTexCoord2f((x + 1) / 10 / TMX, (z + 1) / 10 / TMY);
 	glVertex3f((x / 10) + 0.1, y, (z / 10) + 0.1);
@@ -329,27 +328,27 @@ void Scene::planeXZ(float x, float y, float z,float TMX, float TMY)
 	glVertex3f((x / 10), y, (z / 10));
 }
 
-void Scene::planeXY(float x, float y, float z,float TMX,float TMY)
+void Scene::planeXY(float x, float y, float z, float TMX, float TMY)
 {
 	glTexCoord2f(x / 10 / TMX, (y + 1) / 10 / TMY);
-	glVertex3f(x / 10, y/10+0.1, z);
+	glVertex3f(x / 10, y / 10 + 0.1, z);
 	glTexCoord2f((x + 1) / 10 / TMX, (y + 1) / 10 / TMY);
 	glVertex3f(x / 10 + 0.1, y / 10 + 0.1, z);
 	glTexCoord2f((x + 1) / 10 / TMX, y / 10 / TMY);
-	glVertex3f((x / 10) + 0.1, y/ 10, z );
+	glVertex3f((x / 10) + 0.1, y / 10, z);
 	glTexCoord2f(x / 10 / TMX, y / 10 / TMY);
 
-	glVertex3f((x / 10), y/ 10, z );
+	glVertex3f((x / 10), y / 10, z);
 }
 
-void Scene::planeYZ(float x, float y, float z,float TMX,float TMY)
+void Scene::planeYZ(float x, float y, float z, float TMX, float TMY)
 {
 	glTexCoord2f(z / 10 / TMX, (y + 1) / 10 / TMY);
-	glVertex3f(x , (y/ 10) + 0.1, z / 10);
-	glTexCoord2f((z + 1) / 10 / TMX, (y + 1) / 10/ TMY);
+	glVertex3f(x, (y / 10) + 0.1, z / 10);
+	glTexCoord2f((z + 1) / 10 / TMX, (y + 1) / 10 / TMY);
 	glVertex3f(x, y / 10 + 0.1, (z / 10) + 0.1);
 	glTexCoord2f((z + 1) / 10 / TMX, y / 10 / TMY);
-	glVertex3f(x , y/ 10 , (z / 10)+ 0.1);
+	glVertex3f(x, y / 10, (z / 10) + 0.1);
 	glTexCoord2f(z / 10 / TMX, y / 10 / TMY);
 
 	glVertex3f(x, y / 10, (z / 10));
@@ -360,49 +359,49 @@ void Scene::bench() {
 	glColor3f(1.0f, 1.0f, 1.0f);
 	glBindTexture(GL_TEXTURE_2D, wood);
 	glBegin(GL_QUADS);
-	
+
 	glNormal3f(0.0f, -1.0f, 0.0f);
 	glTexCoord2f(0.0f, 1.0f);
-		glVertex3f(0.0f, 2.0f, 0.5f);
+	glVertex3f(0.0f, 2.0f, 0.5f);
 	glTexCoord2f(1.0f, 1.0f);
-		glVertex3f(2.0f, 2.0f, 0.5f);
+	glVertex3f(2.0f, 2.0f, 0.5f);
 	glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(2.0f, 2.0f, 0.0f);
+	glVertex3f(2.0f, 2.0f, 0.0f);
 	glTexCoord2f(0.0f, 0.0f);
-		glVertex3f(0.0f, 2.0f, 0.0f);
+	glVertex3f(0.0f, 2.0f, 0.0f);
 
-		glEnd();
-		glBindTexture(GL_TEXTURE_2D, NULL);
-		glBegin(GL_QUADS);
+	glEnd();
+	glBindTexture(GL_TEXTURE_2D, NULL);
+	glBegin(GL_QUADS);
 
 	glNormal3f(0.0f, 1.0f, 0.0f);
 	glColor3f(0.5f, 0.5f, 0.5f);
 	glTexCoord2f(0.0f, 1.0f);
-		glVertex3f(0.25f, 2.0f, 0.05f);
+	glVertex3f(0.25f, 2.0f, 0.05f);
 	glTexCoord2f(1.0f, 1.0f);
-		glVertex3f(0.25f, 2.0f, 0.45f);
+	glVertex3f(0.25f, 2.0f, 0.45f);
 	glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(0.25f, 2.5f, 0.3f);
+	glVertex3f(0.25f, 2.5f, 0.3f);
 	glTexCoord2f(0.0f, 0.0f);
-		glVertex3f(0.25f, 2.5f, 0.2f);
+	glVertex3f(0.25f, 2.5f, 0.2f);
 
 	glTexCoord2f(0.0f, 1.0f);
-		glVertex3f(1.0f, 2.0f, 0.05f);
+	glVertex3f(1.0f, 2.0f, 0.05f);
 	glTexCoord2f(1.0f, 1.0f);
-		glVertex3f(1.0f, 2.0f, 0.45f);
+	glVertex3f(1.0f, 2.0f, 0.45f);
 	glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(1.0f, 2.5f, 0.3f);
+	glVertex3f(1.0f, 2.5f, 0.3f);
 	glTexCoord2f(0.0f, 0.0f);
-		glVertex3f(1.0f, 2.5f, 0.2f);
-	
+	glVertex3f(1.0f, 2.5f, 0.2f);
+
 	glTexCoord2f(0.0f, 1.0f);
-		glVertex3f(1.75f, 2.0f, 0.05f);
+	glVertex3f(1.75f, 2.0f, 0.05f);
 	glTexCoord2f(1.0f, 1.0f);
-		glVertex3f(1.75f, 2.0f, 0.45f);
+	glVertex3f(1.75f, 2.0f, 0.45f);
 	glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(1.75f, 2.5f, 0.3f);
+	glVertex3f(1.75f, 2.5f, 0.3f);
 	glTexCoord2f(0.0f, 0.0f);
-		glVertex3f(1.75f, 2.5f, 0.2f);
+	glVertex3f(1.75f, 2.5f, 0.2f);
 
 	glEnd();
 }
@@ -461,52 +460,52 @@ void Scene::drobe() {
 	glEnd();
 }
 void Scene::locker() {
-	
+
 	glColor3f(1.0f, 1.0f, 1.0f);
 	glBindTexture(GL_TEXTURE_2D, closet);
 	glBegin(GL_QUADS);
 	glNormal3f(0.0f, 0.0f, -1.0f);
 	glTexCoord2f(0.0f, 0.0f);
-		glVertex3f(0.0f, 0.5f, 0.0f);
+	glVertex3f(0.0f, 0.5f, 0.0f);
 	glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(1.0f, 0.5f, 0.0f);
+	glVertex3f(1.0f, 0.5f, 0.0f);
 	glTexCoord2f(1.0f, 1.0f);
-		glVertex3f(1.0f, 2.5f, 0.0f);
+	glVertex3f(1.0f, 2.5f, 0.0f);
 	glTexCoord2f(0.0f, 1.0f);
-		glVertex3f(0.0f, 2.5f, 0.0f);
+	glVertex3f(0.0f, 2.5f, 0.0f);
 
-		glNormal3f(1.0f, 0.0f, 0.0f);
+	glNormal3f(1.0f, 0.0f, 0.0f);
 	glTexCoord2f(0.995f, 0.0f);
-		glVertex3f(1.0f, 0.5f, 0.0f);
+	glVertex3f(1.0f, 0.5f, 0.0f);
 	glTexCoord2f(0.995f, 0.0f);
-		glVertex3f(1.0f, 0.5f, 0.5f);
+	glVertex3f(1.0f, 0.5f, 0.5f);
 	glTexCoord2f(0.995f, 1.0f);
-		glVertex3f(1.0f, 2.5f, 0.5f);
+	glVertex3f(1.0f, 2.5f, 0.5f);
 	glTexCoord2f(0.995f, 1.0f);
-		glVertex3f(1.0f, 2.5f, 0.0f);
+	glVertex3f(1.0f, 2.5f, 0.0f);
 
-		glNormal3f(-1.0f, 0.0f, 0.0f);
+	glNormal3f(-1.0f, 0.0f, 0.0f);
 	glTexCoord2f(0.005f, 0.0f);
-		glVertex3f(0.0f, 0.5f, 0.0f);
+	glVertex3f(0.0f, 0.5f, 0.0f);
 	glTexCoord2f(0.005f, 0.0f);
-		glVertex3f(0.0f, 0.5f, 0.5f);
+	glVertex3f(0.0f, 0.5f, 0.5f);
 	glTexCoord2f(0.005f, 1.0f);
-		glVertex3f(0.0f, 2.5f, 0.5f);
+	glVertex3f(0.0f, 2.5f, 0.5f);
 	glTexCoord2f(0.005f, 1.0f);
-		glVertex3f(0.0f, 2.5f, 0.0f);
-	
-		glNormal3f(0.0f, -1.0f, 0.0f);
-	glTexCoord2f(0.0f, 0.05f);
-		glVertex3f(0.0f, 0.5f, 0.5f);
-	glTexCoord2f(1.0f, 0.05f);
-		glVertex3f(1.0f, 0.5f, 0.5f);
-	glTexCoord2f(1.0f, 0.05f);
-		glVertex3f(1.0f, 0.5f, 0.0f);
-	glTexCoord2f(0.0f, 0.05f);
-		glVertex3f(0.0f, 0.5f, 0.0f);
+	glVertex3f(0.0f, 2.5f, 0.0f);
 
-		glEnd();
-		glBindTexture(GL_TEXTURE_2D, NULL);
+	glNormal3f(0.0f, -1.0f, 0.0f);
+	glTexCoord2f(0.0f, 0.05f);
+	glVertex3f(0.0f, 0.5f, 0.5f);
+	glTexCoord2f(1.0f, 0.05f);
+	glVertex3f(1.0f, 0.5f, 0.5f);
+	glTexCoord2f(1.0f, 0.05f);
+	glVertex3f(1.0f, 0.5f, 0.0f);
+	glTexCoord2f(0.0f, 0.05f);
+	glVertex3f(0.0f, 0.5f, 0.0f);
+
+	glEnd();
+	glBindTexture(GL_TEXTURE_2D, NULL);
 }
 
 void Scene::room() {
@@ -517,15 +516,14 @@ void Scene::room() {
 	glBegin(GL_QUADS);
 
 	glNormal3f(0.0f, 0.0f, -1.0f);
-
-	for (float x = -20; x < 40; x++){
+	for (float x = -20; x < 40; x++) {
 		for (float y = 0;y < 25;y++) {
-		planeXY(x,y,4,1,2.5);
-	}}
-	
+			planeXY(x, y, 4, 1, 2.5);
+		}
+	}
+
 
 	glNormal3f(-1.0f, 0.0f, 0.0f);
-
 	for (float z = 20; z < 40; z++) {
 		for (float y = 0;y < 25;y++) {
 			planeYZ(4, y, z, 1, 2.5);
@@ -533,10 +531,6 @@ void Scene::room() {
 	}
 
 	glNormal3f(0.0f, 0.0f, -1.0f);
-
-	glTexCoord2f(0.0f, 0.0f);
-	glVertex3f(4.0f, 0.0f, 2.0f);
-
 	for (float x = 40; x < 50; x++) {
 		for (float y = 0;y < 25;y++) {
 			planeXY(x, y, 2, 1, 2.5);
@@ -558,7 +552,6 @@ void Scene::room() {
 	}
 
 	glNormal3f(0.0f, 0.0f, 1.0f);
-
 	for (float x = 40; x < 50; x++) {
 		for (float y = 0;y < 25;y++) {
 			planeXY(x, y, -2, 1, 2.5);
@@ -566,7 +559,6 @@ void Scene::room() {
 	}
 
 	glNormal3f(-1.0f, 0.0f, 0.0f);
-
 	for (float z = -40; z < -20; z++) {
 		for (float y = 0;y < 25;y++) {
 			planeYZ(4, y, z, 1, 2.5);
@@ -593,7 +585,7 @@ void Scene::room() {
 			planeYZ(-4, y, z, 1, 2.5);
 		}
 	}
-	
+
 	glNormal3f(0.0f, 0.0f, -1.0f);
 	for (float x = -40; x < -20; x++) {
 		for (float y = 0;y < 25;y++) {
@@ -676,11 +668,11 @@ void Scene::room() {
 	glNormal3f(0.0f, -1.0f, 0.0f);
 	glColor3f(1.0f, 1.0f, 1.0f);
 
-	for (float z =-40; z < 40; z++) {
+	for (float z = -40; z < 40; z++) {
 
 		for (float x = -100; x < 60; x++) {
 
-			planeXZ(x, 2.5f, z,1,1);
+			planeXZ(x, 2.5f, z, 1, 1);
 		}
 	}
 
@@ -697,7 +689,7 @@ void Scene::room() {
 
 	for (float z = -40; z < 40; z++) {
 		for (float x = -100; x < 60; x++) {
-			planeXZ(x, 0.0f, z,1,1);
+			planeXZ(x, 0.0f, z, 1, 1);
 		}
 	}
 
@@ -718,7 +710,7 @@ void Scene::initialiseOpenGL()
 }
 
 // Handles the resize of the window. If the window changes size the perspective matrix requires re-calculation to match new window size.
-void Scene::resize(int w, int h) 
+void Scene::resize(int w, int h)
 {
 	width = w;
 	height = h;
@@ -755,7 +747,7 @@ void Scene::calculateFPS()
 	time = glutGet(GLUT_ELAPSED_TIME);
 
 	if (time - timebase > 1000) {
-		sprintf_s(fps, "FPS: %4.2f", frame*1000.0 / (time - timebase));
+		sprintf_s(fps, "FPS: %4.2f", frame * 1000.0 / (time - timebase));
 		timebase = time;
 		frame = 0;
 	}
@@ -797,6 +789,6 @@ void Scene::displayText(float x, float y, float r, float g, float b, char* strin
 	// Swap back to 3D rendering.
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(fov, ((float)width/(float)height), nearPlane, farPlane);
+	gluPerspective(fov, ((float)width / (float)height), nearPlane, farPlane);
 	glMatrixMode(GL_MODELVIEW);
 }
